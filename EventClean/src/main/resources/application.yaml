@@ -3,9 +3,9 @@ spring:
     name: EventClean
 
   datasource:
-    url: jdbc:postgresql:///localhost:5431/EventClean
-    username: POSTGRES_USER=${POSTGRES_USER}
-    password: POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    url: jdbc:postgresql://localhost:5432/EventClean
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -13,3 +13,4 @@ spring:
 
   flyway:
     enabled: true
+    locations: classpath:db/migration
