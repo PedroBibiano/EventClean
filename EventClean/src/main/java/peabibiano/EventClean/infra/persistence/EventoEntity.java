@@ -1,9 +1,11 @@
 package peabibiano.EventClean.infra.persistence;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import peabibiano.EventClean.core.enums.tipoDeEvento;
+
 import java.time.LocalDateTime;
 
 
@@ -23,9 +25,11 @@ public class EventoEntity {
    private LocalDateTime dataInicio;
    private LocalDateTime dataFim;
    private String identificador;
-   private String localEvento;
    private String organizador;
    private int capacidade;
    @Enumerated(EnumType.STRING)
    private tipoDeEvento tipo;
+   private String localEvento;
+
 }
+
