@@ -11,11 +11,10 @@ public record Evento(
         LocalDateTime dataInicio,
         LocalDateTime dataFim,
         String identificador,
-        String localEvento,
-        int capatcidade,
         String organizador,
-        tipoDeEvento tipo
+        int capacidade,
+        tipoDeEvento tipo,
+        String localEvento) {
 
-        ) {
 
 }
