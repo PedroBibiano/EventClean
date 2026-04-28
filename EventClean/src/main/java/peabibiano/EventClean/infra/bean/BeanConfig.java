@@ -1,14 +1,13 @@
-package peabibiano.EventClean.infra.config;
+package peabibiano.EventClean.infra.bean;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import peabibiano.EventClean.core.gateway.EventoGateway;
 import peabibiano.EventClean.core.usecase.CriarEventoCase;
 import peabibiano.EventClean.core.usecase.CriarEventoCaseImpl;
-import peabibiano.EventClean.infra.gateway.EventoRepositoryGateway;
 
 @Configuration
-public class EventoConfig {
+public class BeanConfig {
 
     @Bean
     public CriarEventoCase criarEventoCase(EventoGateway eventoGateway) {

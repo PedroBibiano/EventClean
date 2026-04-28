@@ -1,5 +1,6 @@
 package peabibiano.EventClean.infra.gateway;
 
+import jakarta.persistence.Id;
 import org.springframework.stereotype.Component;
 import peabibiano.EventClean.core.entities.Evento;
 import peabibiano.EventClean.core.gateway.EventoGateway;
@@ -14,7 +15,6 @@ public class EventoRepositoryGateway implements EventoGateway {
 
     private final EventoRepository eventoRepository;
     private final EventoEntityMapper eventoEntityMapper;
-
 
     public EventoRepositoryGateway(EventoRepository eventoRepository, EventoEntityMapper eventoEntityMapper) {
         this.eventoRepository = eventoRepository;
@@ -34,5 +34,9 @@ public class EventoRepositoryGateway implements EventoGateway {
         List<EventoEntity> listaEventos = eventoRepository.findAll();
         return listaEventos.stream().map(eventoEntityMapper::toDomain).toList();
     }
-    
+
+    @Override
+    public void deletarEvento(Long id) {
+        eventoRepository.deleteById(id);
+    }
 }
