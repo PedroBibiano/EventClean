@@ -1,45 +1,145 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalhes do Evento</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Gerenciador de Eventos - EventClean</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="bg-gray-50 text-gray-800 font-sans min-h-screen">
 
-<div class="container">
-    <header>
-        <span id="evento-tipo" class="badge">TIPO</span>
-        <h1 id="evento-nome">Nome do Evento</h1>
-        <p id="evento-id">ID: #000</p>
-    </header>
+<header class="bg-indigo-600 text-white shadow-md">
+    <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <h1 class="text-2xl font-bold tracking-tight">EventClean</h1>
+        </div>
+    </div>
+</header>
 
-    <main>
-        <section class="info-principal">
-            <p><strong>Descrição:</strong> <span id="evento-descricao"></span></p>
-            <p><strong>Local:</strong> <span id="evento-local"></span></p>
-            <p><strong>Organizador:</strong> <span id="evento-organizador"></span></p>
-        </section>
+<main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
 
-        <section class="info-detalhes">
-            <div class="card">
-                <h3>Data e Hora</h3>
-                <p>Início: <span id="data-inicio"></span></p>
-                <p>Fim: <span id="data-fim"></span></p>
+    <div class="border-b border-gray-200 mb-8">
+        <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+            <button onclick="changeTab('create')" id="tab-create" class="border-indigo-500 text-indigo-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                </svg>
+                Criar Evento
+            </button>
+            <button onclick="changeTab('list')" id="tab-list" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
+                </svg>
+                Lista de Eventos
+                <span id="event-count" class="bg-indigo-100 text-indigo-600 py-0.5 px-2.5 rounded-full text-xs font-semibold ml-2 hidden">0</span>
+            </button>
+        </nav>
+    </div>
+
+    <div id="content-create" class="tab-content active max-w-3xl mx-auto bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:p-8">
+
+        <h2 class="text-xl font-semibold text-gray-900 mb-6">Cadastrar Novo Evento</h2>
+
+        <form id="eventoForm" class="space-y-6">
+            <div>
+                <label for="nome" class="block text-sm font-medium text-gray-700">Nome do Evento</label>
+                <input type="text" id="nome" name="nome" required class="mt-1 block w-full rounded-md border-gray-300 border p-2.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition-colors">
             </div>
-            <div class="card">
-                <h3>Capacidade</h3>
-                <p><span id="evento-capacidade">0</span> pessoas</p>
-            </div>
-        </section>
-    </main>
 
-    <footer>
-        <p>Identificador Único: <code id="evento-identificador"></code></p>
-    </footer>
+            <div>
+                <label for="descricao" class="block text-sm font-medium text-gray-700">Descrição</label>
+                <textarea id="descricao" name="descricao" rows="3" required class="mt-1 block w-full rounded-md border-gray-300 border p-2.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition-colors"></textarea>
+            </div>
+
+            <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+                <div>
+                    <label for="dataInicio" class="block text-sm font-medium text-gray-700">Data e Hora de Início</label>
+                    <input type="datetime-local" id="dataInicio" name="dataInicio" required class="mt-1 block w-full rounded-md border-gray-300 border p-2.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition-colors">
+                </div>
+
+                <div>
+                    <label for="dataFim" class="block text-sm font-medium text-gray-700">Data e Hora de Término</label>
+                    <input type="datetime-local" id="dataFim" name="dataFim" required class="mt-1 block w-full rounded-md border-gray-300 border p-2.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition-colors">
+                </div>
+
+                <div>
+                    <label for="identificador" class="block text-sm font-medium text-gray-700">Identificador (Ex: EVT-2023-01)</label>
+                    <input type="text" id="identificador" name="identificador" required class="mt-1 block w-full rounded-md border-gray-300 border p-2.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition-colors">
+                </div>
+
+                <div>
+                    <label for="organizador" class="block text-sm font-medium text-gray-700">Organizador</label>
+                    <input type="text" id="organizador" name="organizador" required class="mt-1 block w-full rounded-md border-gray-300 border p-2.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition-colors">
+                </div>
+
+                <div>
+                    <label for="capacidade" class="block text-sm font-medium text-gray-700">Capacidade Máxima</label>
+                    <input type="number" id="capacidade" name="capacidade" min="1" required class="mt-1 block w-full rounded-md border-gray-300 border p-2.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition-colors">
+                </div>
+
+                <div>
+                    <label for="tipo" class="block text-sm font-medium text-gray-700">Tipo de Evento</label>
+                    <select id="tipo" name="tipo" required class="mt-1 block w-full rounded-md border-gray-300 border p-2.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-white transition-colors">
+                        <option value="" disabled selected>Selecione um tipo...</option>
+                        <option value="WORKSHOP">Workshop</option>
+                        <option value="PALESTRA">Palestra</option>
+                        <option value="MUSICA">Música</option>
+                        <option value="SEMINARIO">Seminário</option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <label for="localEvento" class="block text-sm font-medium text-gray-700">Local do Evento</label>
+                <input type="text" id="localEvento" name="localEvento" required class="mt-1 block w-full rounded-md border-gray-300 border p-2.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition-colors">
+            </div>
+
+            <div class="pt-5 flex justify-end gap-3 border-t border-gray-200 mt-6">
+                <button type="button" onclick="document.getElementById('eventoForm').reset()" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+                    Limpar
+                </button>
+                <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+                    Salvar Evento
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div id="content-list" class="tab-content">
+
+        <div id="empty-state" class="text-center py-16 bg-white rounded-xl shadow-sm border border-gray-100">
+            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+            </svg>
+            <h3 class="mt-2 text-sm font-medium text-gray-900">Nenhum evento criado</h3>
+            <p class="mt-1 text-sm text-gray-500">Comece criando um novo evento para vê-lo aqui.</p>
+            <div class="mt-6">
+                <button onclick="changeTab('create')" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                    </svg>
+                    Novo Evento
+                </button>
+            </div>
+        </div>
+
+        <div id="events-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hidden">
+        </div>
+    </div>
+
+</main>
+
+<div id="toast" class="flex items-center gap-2">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+    <span id="toast-message">Evento salvo com sucesso!</span>
 </div>
 
-<script src="js/script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>

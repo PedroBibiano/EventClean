@@ -37,3 +37,26 @@
     transform: translateY(0);
     opacity: 1;
 }
+/* Container do card com posição relativa para o botão absoluto */
+.event-card {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+/* Esconde o botão de deletar por padrão */
+.delete-btn {
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+/* Mostra o botão quando passa o mouse no card */
+.event-card:hover .delete-btn {
+    opacity: 1;
+}
+
+/* Estilo para o ícone de X */
+.delete-btn:hover {
+    color: #ef4444; /* red-500 */
+    transform: scale(1.1);
+}
