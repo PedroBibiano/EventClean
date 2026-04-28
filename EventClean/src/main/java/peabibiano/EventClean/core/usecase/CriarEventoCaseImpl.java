@@ -3,6 +3,7 @@ package peabibiano.EventClean.core.usecase;
 import peabibiano.EventClean.core.entities.Evento;
 import peabibiano.EventClean.core.gateway.EventoGateway;
 
+
 public class CriarEventoCaseImpl implements CriarEventoCase {
 
     private final EventoGateway eventoGateway;
@@ -12,7 +13,7 @@ public class CriarEventoCaseImpl implements CriarEventoCase {
 
     @Override
     public Evento execute(Evento evento) {
-        return evento;
+        return eventoGateway.criarEvento(evento);
     }
 
 }

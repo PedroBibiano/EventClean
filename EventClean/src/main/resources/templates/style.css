@@ -1,0 +1,39 @@
+/* Estilos adicionais para animações suaves */
+.tab-content {
+    display: none;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+#toast {
+    visibility: hidden;
+    min-width: 250px;
+    background-color: #10B981; /* Tailwind emerald-500 */
+    color: #fff;
+    text-align: center;
+    border-radius: 8px;
+    padding: 16px;
+    position: fixed;
+    z-index: 50;
+    right: 30px;
+    bottom: 30px;
+    font-size: 17px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s ease-in-out;
+}
+
+#toast.show {
+    visibility: visible;
+    transform: translateY(0);
+    opacity: 1;
+}

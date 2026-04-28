@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Evento</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <span id="evento-tipo" class="badge">TIPO</span>
+        <h1 id="evento-nome">Nome do Evento</h1>
+        <p id="evento-id">ID: #000</p>
+    </header>
+
+    <main>
+        <section class="info-principal">
+            <p><strong>Descrição:</strong> <span id="evento-descricao"></span></p>
+            <p><strong>Local:</strong> <span id="evento-local"></span></p>
+            <p><strong>Organizador:</strong> <span id="evento-organizador"></span></p>
+        </section>
+
+        <section class="info-detalhes">
+            <div class="card">
+                <h3>Data e Hora</h3>
+                <p>Início: <span id="data-inicio"></span></p>
+                <p>Fim: <span id="data-fim"></span></p>
+            </div>
+            <div class="card">
+                <h3>Capacidade</h3>
+                <p><span id="evento-capacidade">0</span> pessoas</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Identificador Único: <code id="evento-identificador"></code></p>
+    </footer>
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>

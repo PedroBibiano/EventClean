@@ -3,18 +3,13 @@ package peabibiano.EventClean.core.usecase;
 import peabibiano.EventClean.core.entities.Evento;
 import peabibiano.EventClean.core.gateway.EventoGateway;
 
-import java.util.List;
-
-public class ListarEventoCaseImpl implements ListarEventoCase {
-
+public class DeletarEventoCaseImpl {
     private final EventoGateway eventoGateway;
 
-    public ListarEventoCaseImpl(EventoGateway eventoGateway) {
+    public DeletarEventoCaseImpl(EventoGateway eventoGateway) {
         this.eventoGateway = eventoGateway;
     }
 
-    @Override
-    public List<Evento> execute() {
-        return eventoGateway.ListarEventos();
+    public void execute(Long id) {
     }
 }
