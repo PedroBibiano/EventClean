@@ -21,7 +21,6 @@ public class BeanConfig {
 
     @Bean
     public DeletarEventoCase deletarEventoCase(EventoGateway eventoGateway) {
-
         return new DeletarEventoCaseImpl(eventoGateway);
     }
 }
