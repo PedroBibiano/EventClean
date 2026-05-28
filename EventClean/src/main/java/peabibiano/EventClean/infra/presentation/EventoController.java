@@ -9,7 +9,9 @@ import peabibiano.EventClean.infra.dtos.EventoDto;
 import peabibiano.EventClean.infra.gateway.EventoRepositoryGateway;
 import peabibiano.EventClean.infra.mappers.EventoDtoMapper;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/v1/")
@@ -27,12 +29,12 @@ public class EventoController {
     }
 
     @PostMapping("criarevento")
-    public ResponseEntity<EventoDto> Criarevento(@RequestBody EventoDto eventoDto) {
+    public ResponseEntity<Map<String, Object>> criarevento(@RequestBody EventoDto eventoDto) {
         Evento novoEvento = criarEventoCase.execute(eventoDtoMapper.toDomain(eventoDto));
-
-        ResponseEntity<EventoDto> response = ResponseEntity.ok(eventoDtoMapper.toDto(novoEvento));
-
-        return response;
+        Map<String, Object> response = new HashMap<>();
+        response.put("Message:","evento cadastrado");
+        response.put("dados do evento: ",  eventoDtoMapper.toDto(novoEvento));
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("listareventos")
