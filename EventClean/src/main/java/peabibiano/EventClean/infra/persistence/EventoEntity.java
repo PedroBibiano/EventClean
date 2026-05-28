@@ -8,12 +8,11 @@ import peabibiano.EventClean.core.enums.tipoDeEvento;
 
 import java.time.LocalDateTime;
 
-
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "Eventos")
+@Table(name = "eventos")
 public class EventoEntity {
 
    @Id
@@ -21,15 +20,25 @@ public class EventoEntity {
    private Long id;
 
    private String nome;
+
    private String descricao;
+
+   @Column(name = "data_inicio")
    private LocalDateTime dataInicio;
+
+   @Column(name = "data_fim")
    private LocalDateTime dataFim;
+
+   @Column(unique = true)
    private String identificador;
+
    private String organizador;
+
    private int capacidade;
+
    @Enumerated(EnumType.STRING)
    private tipoDeEvento tipo;
+
+   @Column(name = "local_evento")
    private String localEvento;
-
 }
-
