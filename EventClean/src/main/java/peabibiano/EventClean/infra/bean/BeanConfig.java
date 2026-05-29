@@ -23,4 +23,8 @@ public class BeanConfig {
     public DeletarEventoCase deletarEventoCase(EventoGateway eventoGateway) {
         return new DeletarEventoCaseImpl(eventoGateway);
     }
+    @Bean
+    public FiltroIdentificadorCase filtroIdentificadorCase(EventoGateway eventoGateway) {
+        return new FiltroIdentificadorCaseImpl(eventoGateway);
+    }
 }
