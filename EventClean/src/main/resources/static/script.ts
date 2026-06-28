@@ -14,20 +14,29 @@ interface Evento {
     localEvento: string;
 }
 
+declare global {
+    interface Window {
+        deletarEvento: (id: number) => void;
+        changeTab: (tabName: 'create' | 'list') => void;
+    }
+}
+
 // ==========================================
 // VARIÁVEIS GLOBAIS
 // ==========================================
 let eventos: Evento[] = [];
-const API_URL: string = 'http://localhost:8080/api/v1';
+const API_URL: string = `${window.location.origin}/api/v1`;
 
 // ==========================================
 // COMUNICAÇÃO COM O BACK-END (JAVA)
 // ==========================================
 
-// Buscar eventos do Java
 function carregarEventosDoServidor(): void {
     fetch(`${API_URL}/listareventos`)
-        .then((response: Response) => response.json())
+        .then((response: Response) => {
+            if (!response.ok) throw new Error('Erro na resposta do servidor');
+            return response.json();
+        })
         .then((dados: Evento[]) => {
             eventos = dados;
 
@@ -43,10 +52,12 @@ function carregarEventosDoServidor(): void {
 
             renderEvents();
         })
-        .catch((error: Error) => console.error('Erro ao buscar do Java:', error));
+        .catch((error: Error) => {
+            console.error('Erro ao buscar do Java:', error);
+            showToast('Erro ao carregar lista de eventos.');
+        });
 }
 
-// Inicialização e Submissão de Formulário
 document.addEventListener('DOMContentLoaded', () => {
     const eventoForm = document.getElementById('eventoForm') as HTMLFormElement | null;
 
@@ -54,14 +65,17 @@ document.addEventListener('DOMContentLoaded', () => {
         eventoForm.addEventListener('submit', (event: SubmitEvent) => {
             event.preventDefault();
 
+            const dataInicioInput = (document.getElementById('dataInicio') as HTMLInputElement).value;
+            const dataFimInput = (document.getElementById('dataFim') as HTMLInputElement).value;
+
             const novoEvento: Evento = {
                 nome: (document.getElementById('nome') as HTMLInputElement).value,
                 descricao: (document.getElementById('descricao') as HTMLTextAreaElement).value,
-                dataInicio: (document.getElementById('dataInicio') as HTMLInputElement).value,
-                dataFim: (document.getElementById('dataFim') as HTMLInputElement).value,
+                dataInicio: dataInicioInput ? new Date(dataInicioInput).toISOString() : '',
+                dataFim: dataFimInput ? new Date(dataFimInput).toISOString() : '',
                 identificador: (document.getElementById('identificador') as HTMLInputElement).value,
                 organizador: (document.getElementById('organizador') as HTMLInputElement).value,
-                capacidade: parseInt((document.getElementById('capacidade') as HTMLInputElement).value),
+                capacidade: parseInt((document.getElementById('capacidade') as HTMLInputElement).value, 10),
                 tipo: (document.getElementById('tipo') as HTMLSelectElement).value,
                 localEvento: (document.getElementById('localEvento') as HTMLInputElement).value
             };
@@ -77,16 +91,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (response.ok) {
                         showToast('Evento salvo com sucesso!');
                         eventoForm.reset();
+                        changeTab('list');
                     } else {
                         throw new Error('Erro ao salvar o evento');
                     }
                 })
                 .catch((error: Error) => {
                     console.error('Erro na submissão:', error);
-                    alert('Erro ao salvar o evento. Verifique a consola.');
+                    showToast('Erro ao salvar. Verifique restrições UNIQUE.');
                 });
         });
     }
+
+    carregarEventosDoServidor();
 });
 
 // ==========================================
@@ -144,15 +161,15 @@ function renderEvents(): void {
 
     eventos.forEach((evento: Evento) => {
         const card: HTMLDivElement = document.createElement('div');
-        card.className = 'event-card bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200 hover:shadow-md transition-shadow';
+        card.className = 'event-card relative bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200 hover:shadow-md transition-shadow';
 
         card.innerHTML = `
-            <button onclick="deletarEvento(${evento.id})" class="delete-btn absolute top-2 right-2 text-gray-400 p-1 z-10" title="Excluir evento">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <button onclick="deletarEvento(${evento.id})" class="delete-btn absolute top-3 right-3 text-gray-400 p-1 z-10 hover:text-red-500 transition-all" title="Excluir evento">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>
-            <div class="px-4 py-5 sm:px-6 border-b border-gray-100 bg-gray-50 flex justify-between items-start">
+            <div class="px-4 py-5 sm:px-6 border-b border-gray-100 bg-gray-50 flex justify-between items-start pr-10">
                 <div>
                     <h3 class="text-lg leading-6 font-medium text-gray-900">${evento.nome}</h3>
                     <p class="mt-1 max-w-2xl text-sm text-gray-500">${evento.tipo}</p>
@@ -162,13 +179,13 @@ function renderEvents(): void {
                 </span>
             </div>
             <div class="px-4 py-5 sm:p-6">
-                <p class="text-sm text-gray-700 mb-4">${evento.descricao}</p>
+                <p class="text-sm text-gray-700 mb-4 line-clamp-2">${evento.descricao}</p>
                 <div class="space-y-2 text-sm text-gray-600">
                     <div class="flex items-center gap-2">
                         <svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
-                        ${formatarData(evento.dataInicio)} - ${formatarData(evento.dataFim)}
+                        ${formatarData(evento.dataInicio)} — ${formatarData(evento.dataFim)}
                     </div>
                     <div class="flex items-center gap-2">
                         <svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -176,6 +193,9 @@ function renderEvents(): void {
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
                         ${evento.localEvento}
+                    </div>
+                    <div class="text-xs text-gray-400 pt-2 border-t border-gray-50">
+                        Organizador: ${evento.organizador} (Capacidade: ${evento.capacidade})
                     </div>
                 </div>
             </div>
@@ -200,7 +220,7 @@ function showToast(message: string): void {
 function formatarData(dataString: string): string {
     if (!dataString) return '';
     const data: Date = new Date(dataString);
-    return data.toLocaleString('pt-PT', {
+    return data.toLocaleString('pt-BR', {
         day: '2-digit', month: '2-digit', year: 'numeric',
         hour: '2-digit', minute: '2-digit'
     });
@@ -225,3 +245,6 @@ function deletarEvento(id: number): void {
             alert('Erro de conexão ao tentar deletar.');
         });
 }
+
+window.deletarEvento = deletarEvento;
+window.changeTab = changeTab;

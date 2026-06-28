@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/EventClean.iml" filepath="$PROJECT_DIR$/.idea/EventClean.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EventClean/EventClean.iml" filepath="$PROJECT_DIR$/EventClean/EventClean.iml" />
     </modules>
   </component>
 </project>

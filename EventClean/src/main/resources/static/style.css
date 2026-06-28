@@ -37,6 +37,7 @@
     transform: translateY(0);
     opacity: 1;
 }
+
 /* Container do card com posição relativa para o botão absoluto */
 .event-card {
     position: relative;
